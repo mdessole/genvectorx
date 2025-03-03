@@ -10,58 +10,6 @@ list(APPEND cuda_compile_list_single SINGLE_PRECISION)
 set(compile_list_single "${compile_list}")
 list(APPEND compile_list_single SINGLE_PRECISION)
 
-<<<<<<< HEAD
-if(oneapi)
-  add_executable(InvariantMassesSYCL InvariantMassesSYCL.cxx)
-  target_link_options(InvariantMassesSYCL PUBLIC -E)
-  add_sycl_to_root_target_exe(
-    TARGET
-    InvariantMassesSYCL
-    SOURCES
-    InvariantMassesSYCL.cxx
-    DEPENDENCIES
-    GenVectorX
-    SYCLMath
-    VecOps
-    INCLUDE_DIRECTORIES
-    ${CMAKE_SOURCE_DIR}/inc
-    COMPILE_DEFINITIONS
-    ${sycl_compile_list})
-
-  add_executable(BoostSYCL BoostSYCL.cxx)
-  target_link_options(BoostSYCL PUBLIC -E)
-  add_sycl_to_root_target_exe(
-    TARGET
-    BoostSYCL
-    SOURCES
-    BoostSYCL.cxx
-    DEPENDENCIES
-    GenVectorX
-    SYCLMath
-    VecOps
-    INCLUDE_DIRECTORIES
-    ${CMAKE_SOURCE_DIR}/inc
-    COMPILE_DEFINITIONS
-    ${sycl_compile_list})
-
-  if(single_precision)
-    add_executable(SInvariantMassesSYCL InvariantMassesSYCL.cxx)
-    target_link_options(SInvariantMassesSYCL PUBLIC -E)
-    add_sycl_to_root_target_exe(
-      TARGET
-      SInvariantMassesSYCL
-      SOURCES
-      InvariantMassesSYCL.cxx
-      DEPENDENCIES
-      GenVectorX
-      SYCLMath
-      VecOps
-      INCLUDE_DIRECTORIES
-      ${CMAKE_SOURCE_DIR}/inc
-      COMPILE_DEFINITIONS
-      ${sycl_compile_list_single})
-
-=======
 if(alpaka)
 
   if(alpakacpu)
