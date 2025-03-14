@@ -57,6 +57,10 @@ namespace ROOT {
 
       TVector* lvb = new TVector[N];
 
+#ifdef ROOT_MEAS_TIMING
+      auto start = std::chrono::system_clock::now();
+#endif
+
       // allocate device buffers
       auto d_lv = alpaka::allocAsyncBuf<TVector, Idx>(queue, static_cast<Idx>(N));
       auto d_lvb = alpaka::allocAsyncBuf<TVector, Idx>(queue, static_cast<Idx>(N));
@@ -80,6 +84,16 @@ namespace ROOT {
 
       // memcpy
       alpaka::memcpy(queue, alpaka::createView(devHost, lvb, Vec{N}), d_lvb);
+
+#ifdef ROOT_MEAS_TIMING
+      auto end = std::chrono::system_clock::now();
+      auto duration =
+          std::chrono::duration_cast<std::chrono::microseconds>(end - start)
+              .count() *
+          1e-6;
+      std::cout << "alpaka time " << duration << " (s)" << std::endl;
+#endif
+
       return lvb;
     }
 
@@ -129,6 +143,10 @@ namespace ROOT {
 
       TScalar* invMasses = new TScalar[N];
 
+#ifdef ROOT_MEAS_TIMING
+      auto start = std::chrono::system_clock::now();
+#endif
+
       // allocate device buffers
       auto d_lv = alpaka::allocAsyncBuf<TVector, Idx>(queue, static_cast<Idx>(N));
       auto d_m = alpaka::allocAsyncBuf<TScalar, Idx>(queue, static_cast<Idx>(N));
@@ -149,6 +167,16 @@ namespace ROOT {
 
       // memcpy
       alpaka::memcpy(queue, alpaka::createView(devHost, invMasses, Vec{N}), d_m);
+
+#ifdef ROOT_MEAS_TIMING
+      auto end = std::chrono::system_clock::now();
+      auto duration =
+          std::chrono::duration_cast<std::chrono::microseconds>(end - start)
+              .count() *
+          1e-6;
+      std::cout << "alpaka time " << duration << " (s)" << std::endl;
+#endif
+
       return invMasses;
     }
 
@@ -167,6 +195,10 @@ namespace ROOT {
       auto const devHost = alpaka::getDevByIdx(alpaka::PlatformCpu{}, 0);
 
       TScalar* invMasses = new TScalar[N];
+
+#ifdef ROOT_MEAS_TIMING
+      auto start = std::chrono::system_clock::now();
+#endif
 
       // allocate device buffers
       auto d_v1 = alpaka::allocAsyncBuf<TVector, Idx>(queue, static_cast<Idx>(N));
@@ -191,6 +223,16 @@ namespace ROOT {
 
       // memcpy
       alpaka::memcpy(queue, alpaka::createView(devHost, invMasses, Vec{N}), d_m);
+
+#ifdef ROOT_MEAS_TIMING
+      auto end = std::chrono::system_clock::now();
+      auto duration =
+          std::chrono::duration_cast<std::chrono::microseconds>(end - start)
+              .count() *
+          1e-6;
+      std::cout << "alpaka time " << duration << " (s)" << std::endl;
+#endif
+
       return invMasses;
     }
 

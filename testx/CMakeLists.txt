@@ -14,6 +14,7 @@ if(alpaka)
 
   if(alpakacpu)
     add_executable(BoostAlpakaCpu BoostAlpaka.cxx)
+    target_link_libraries(BoostAlpakaCpu PUBLIC alpaka::alpaka)
     target_compile_options(
       BoostAlpakaCpu PRIVATE -DALPAKA_HOST_ONLY
                              -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
@@ -24,17 +25,40 @@ if(alpaka)
                              ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
 
     add_executable(InvariantMassesAlpakaCpu InvariantMassesAlpaka.cxx)
+    target_link_libraries(InvariantMassesAlpakaCpu PUBLIC alpaka::alpaka)
     target_include_directories(
       InvariantMassesAlpakaCpu PRIVATE ${Alpaka_SOURCE_DIR}/include
                                        ${Boost_INCLUDE_DIR})
     target_compile_definitions(
       InvariantMassesAlpakaCpu PRIVATE ${alpaka_compile_list} ALPAKA_HOST_ONLY
                                        ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+    if(single_precision)
+      add_executable(SBoostAlpakaCpu BoostAlpaka.cxx)
+      target_link_libraries(SBoostAlpakaCpu PUBLIC alpaka::alpaka)
+      target_compile_options(
+        SBoostAlpakaCpu PRIVATE -DALPAKA_HOST_ONLY
+                              -DALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+      target_include_directories(
+        SBoostAlpakaCpu PRIVATE ${Alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+      target_compile_definitions(
+        SBoostAlpakaCpu PRIVATE ${alpaka_compile_list_single} ALPAKA_HOST_ONLY
+                              ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+
+      add_executable(SInvariantMassesAlpakaCpu InvariantMassesAlpaka.cxx)
+      target_link_libraries(SInvariantMassesAlpakaCpu PUBLIC alpaka::alpaka)
+      target_include_directories(
+        SInvariantMassesAlpakaCpu PRIVATE ${Alpaka_SOURCE_DIR}/include
+                                        ${Boost_INCLUDE_DIR})
+      target_compile_definitions(
+        SInvariantMassesAlpakaCpu PRIVATE ${alpaka_compile_list_single} ALPAKA_HOST_ONLY
+                                        ALPAKA_ACC_CPU_B_SEQ_T_SEQ_ENABLED)
+    endif()
   endif()
 
   if(alpakacuda)
-	set_source_files_properties(BoostAlpaka.cxx PROPERTIES LANGUAGE CUDA)
+	  set_source_files_properties(BoostAlpaka.cxx PROPERTIES LANGUAGE CUDA)
     add_executable(BoostAlpakaCuda BoostAlpaka.cxx)
+    target_link_libraries(BoostAlpakaCuda PUBLIC alpaka::alpaka)
     target_compile_options(BoostAlpakaCuda
                            PRIVATE -DALPAKA_ACC_GPU_CUDA_ENABLED)
     target_include_directories(
@@ -43,32 +67,76 @@ if(alpaka)
       BoostAlpakaCuda PRIVATE ${alpaka_compile_list}
                               ALPAKA_ACC_GPU_CUDA_ENABLED)
 
-	set_source_files_properties(InvariantMassesAlpaka.cxx PROPERTIES LANGUAGE CUDA)
+	  set_source_files_properties(InvariantMassesAlpaka.cxx PROPERTIES LANGUAGE CUDA)
     add_executable(InvariantMassesAlpakaCuda InvariantMassesAlpaka.cxx)
+    target_link_libraries(InvariantMassesAlpakaCuda PUBLIC alpaka::alpaka)
     target_include_directories(
       InvariantMassesAlpakaCuda PRIVATE ${Alpaka_SOURCE_DIR}/include
                                         ${Boost_INCLUDE_DIR})
     target_compile_definitions(
       InvariantMassesAlpakaCuda PRIVATE ${alpaka_compile_list}
                                         ALPAKA_ACC_GPU_CUDA_ENABLED)
+    if(single_precision)
+      set_source_files_properties(SBoostAlpaka.cxx PROPERTIES LANGUAGE CUDA)
+      add_executable(SBoostAlpakaCuda BoostAlpaka.cxx)
+      target_link_libraries(SBoostAlpakaCuda PUBLIC alpaka::alpaka)
+      target_compile_options(SBoostAlpakaCuda
+                            PRIVATE -DALPAKA_ACC_GPU_CUDA_ENABLED)
+      target_include_directories(
+        SBoostAlpakaCuda PRIVATE ${Alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+      target_compile_definitions(
+        SBoostAlpakaCuda PRIVATE ${alpaka_compile_list_single}
+                                ALPAKA_ACC_GPU_CUDA_ENABLED)
+
+      set_source_files_properties(SInvariantMassesAlpaka.cxx PROPERTIES LANGUAGE CUDA)
+      add_executable(SInvariantMassesAlpakaCuda InvariantMassesAlpaka.cxx)
+      target_link_libraries(SInvariantMassesAlpakaCuda PUBLIC alpaka::alpaka)
+      target_include_directories(
+        SInvariantMassesAlpakaCuda PRIVATE ${Alpaka_SOURCE_DIR}/include
+                                          ${Boost_INCLUDE_DIR})
+      target_compile_definitions(
+        SInvariantMassesAlpakaCuda PRIVATE ${alpaka_compile_list_single}
+                                          ALPAKA_ACC_GPU_CUDA_ENABLED)
+    endif()
   endif()
 
   if(alpakahip)
-	set_source_files_properties(BoostAlpaka.cxx PROPERTIES LANGUAGE HIP)
+	  set_source_files_properties(BoostAlpaka.cxx PROPERTIES LANGUAGE HIP)
     add_executable(BoostAlpakaHip BoostAlpaka.cxx)
+    target_link_libraries(BoostAlpakaHip PUBLIC alpaka::alpaka)
     target_include_directories(
       BoostAlpakaHip PRIVATE ${Alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
     target_compile_definitions(
       BoostAlpakaHip PRIVATE ${alpaka_compile_list} ALPAKA_ACC_GPU_HIP_ENABLED)
 
-	set_source_files_properties(InvariantMassesAlpaka.cxx PROPERTIES LANGUAGE HIP)
+	  set_source_files_properties(InvariantMassesAlpaka.cxx PROPERTIES LANGUAGE HIP)
     add_executable(InvariantMassesAlpakaHip InvariantMassesAlpaka.cxx)
+    target_link_libraries(InvariantMassesAlpakaHip PUBLIC alpaka::alpaka)
     target_include_directories(
       InvariantMassesAlpakaHip PRIVATE ${Alpaka_SOURCE_DIR}/include
                                        ${Boost_INCLUDE_DIR})
     target_compile_definitions(
       InvariantMassesAlpakaHip PRIVATE ${alpaka_compile_list}
                                        ALPAKA_ACC_GPU_HIP_ENABLED)
+    if(single_precision)
+      set_source_files_properties(SBoostAlpaka.cxx PROPERTIES LANGUAGE HIP)
+      add_executable(SBoostAlpakaHip BoostAlpaka.cxx)
+      target_link_libraries(SBoostAlpakaHip PUBLIC alpaka::alpaka)
+      target_include_directories(
+        SBoostAlpakaHip PRIVATE ${Alpaka_SOURCE_DIR}/include ${Boost_INCLUDE_DIR})
+      target_compile_definitions(
+        SBoostAlpakaHip PRIVATE ${alpaka_compile_list_single} ALPAKA_ACC_GPU_HIP_ENABLED)
+
+      set_source_files_properties(SInvariantMassesAlpaka.cxx PROPERTIES LANGUAGE HIP)
+      add_executable(SInvariantMassesAlpakaHip InvariantMassesAlpaka.cxx)
+      target_link_libraries(SInvariantMassesAlpakaHip PUBLIC alpaka::alpaka)
+      target_include_directories(
+        SInvariantMassesAlpakaHip PRIVATE ${Alpaka_SOURCE_DIR}/include
+                                        ${Boost_INCLUDE_DIR})
+      target_compile_definitions(
+        SInvariantMassesAlpakaHip PRIVATE ${alpaka_compile_list_single}
+                                        ALPAKA_ACC_GPU_HIP_ENABLED)
+    endif()
   endif()
 
 endif()
